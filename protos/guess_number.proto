@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option go_package = "github.com/gardusig/grpc-service/go/model/generated";
+
+service GuessNumberService {
+  rpc GuessRandomNumber (Guess) returns (GuessResponse) {}
+  rpc UnlockBox (LockedBox) returns (Box) {}
+}
+
+message Guess {
+  int64 number = 1;
+}
+
+message GuessResponse {
+  string inequalitySign = 1;
+  optional LockedBox box = 2;
+}
+
+message LockedBox {
+  bytes encryptedValue = 1;
+}
+
+message Box {
+  string value = 1;
+}
