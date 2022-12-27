@@ -33,7 +33,7 @@ There are two defined procedures to be remotely called
   - Input: `LockedBox`
   - Output: `Box`
 
-[Check it out](/protos/example.proto)!
+[Check it out](/protos/guess_number.proto)!
 
 ## Programming Languages
 
