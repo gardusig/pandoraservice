@@ -19,7 +19,7 @@ The goal of this project is to document the setup for establishing a gRPC commun
   - Instead of guessing each number, you can benefit from the server response to avoid making unnecessary guesses
   - Since each wrong guess reduces the amount of possibilities by its half
     - Worst case goes from $O(N)$ to $O(log_2(N))$
-      - $N$ is the amount of possible values ($\approxeq16 * 10^{18}$)
+      - $N$ is the amount of possible values ($\approx 16 * 10^{18}$)
         - which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18})\approxeq64$
 
 ### Protocol Buffers
