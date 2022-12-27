@@ -2,7 +2,7 @@
 
 The goal of this project is to document the setup for establishing a gRPC communication between a server and its clients.
 
-## GuessNumberService
+## GuessNumber Service
 
 ### Statements
 
@@ -19,13 +19,12 @@ The goal of this project is to document the setup for establishing a gRPC commun
   - Instead of guessing each number, you can benefit from the server response to avoid making unnecessary guesses
   - Since each wrong guess reduces the amount of possibilities by its half
     - Worst case goes from $O(N)$ to $O(log_2(N))$
-      - where $N$ is the amount of possible values ($16 * 10^{18}$)
-        - which also happens to be quite close to the amount of the possible integers to fit inside a 64-bit
-          - $log_2(16 * 10^{18})=64$
+      - where $N$ is the amount of possible values ($16 * 10^{18}$ in this case)
+        - which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18})=64$
 
 ### Protocol Buffers
 
-There are two defined procedures to be remotely called:
+There are two defined procedures to be remotely called
 - `GuessRandomNumber`
   - Input: `Guess`
   - Output: `GuessResponse`
@@ -35,6 +34,6 @@ There are two defined procedures to be remotely called:
 
 [Check it out](/protos/example.proto)!
 
-## Languages
+## Programming Languages
 
 1. [Go](/go/README.md)
