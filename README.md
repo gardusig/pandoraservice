@@ -13,7 +13,7 @@ The goal of this project is to document the setup for establishing a gRPC commun
   - `>` if given number is greater than special number
   - `=` if given number is equal to special number
     - There will also be a locked box as your prize
-- Guessed numbers must lie within the interval defined by: $[-8 * 10^{18}, +8 * 10^{18}]$
+- Guessed numbers must lie within the interval defined by: $[-8 * 10^{18}, +8 * 10^{18}]$ (every number with up to $18$ digits)
   - Given that your computer probably can't process more than $10^{10}$ operations in a second, a naive approach of guessing each possible number would take at least $5$ years to execute
 - There is in fact one algorithm capable of solving this question a bit faster - `binary search`
   - Instead of guessing each number, you can benefit from the server response to avoid making unnecessary guesses
