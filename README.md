@@ -1,40 +1,60 @@
-# grpc-service
+## Metis - The Wise Stock Advisor
 
-The goal of this project is to document the setup for establishing a gRPC communication between a server and its clients.
+#### Introduction
+Metis, named after the ancient Greek goddess of wisdom, is my personal evaluation software designed to provide insightful guidance on my investiment decisions. </br></br>
+Taking inspiration from the goddess Metis' wise counsel, this tool employs a carefully curated set of rules to delve deep into the financial health and intrinsic value of stocks. 
+By leveraging fundamental analysis techniques, Metis empowers us with the knowledge we need to make informed decisions.
 
-## GuessNumber Service
 
-### Statements
+### Proto
 
-- A special number is randomly generated at the server startup
-  - It gets updated every time a guess is made by a client with the exact same number
-- For each guess, the server will respond with
-  - `<` if given number is less than special number
-  - `>` if given number is greater than special number
-  - `=` if given number is equal to special number
-    - There will also be a locked box as your prize
-- Guessed numbers must lie within the interval defined by: $[-8 * 10^{18}, +8 * 10^{18}]$ 
-  - Every number with up to $18$ digits
-  - Given that your computer probably can't process more than $10^{10}$ operations in a second, a naive approach of guessing each possible number would take at least $5$ years to execute
-- There is in fact one algorithm capable of solving this question a bit faster - `binary search`
-  - Instead of guessing each number, you can benefit from the server response to avoid making unnecessary guesses
-  - Since each wrong guess reduces the amount of possibilities by its half
-    - Worst case goes from $O(N)$ to $O(log_2(N))$
-      - $N$ is the amount of possible values: $\approx 16 * 10^{18}$
-        - which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18}) \approxeq 64$
+#### Go
 
-### Protocol Buffers
+Install:
 
-There are two defined procedures to be remotely called
-- `GuessRandomNumber`
-  - Input: `Guess`
-  - Output: `GuessResponse`
-- `OpenBox`
-  - Input: `LockedBox`
-  - Output: `Box`
+```bash
+go get google.golang.org/grpc/cmd/protoc-gen-go-grpc
+```
 
-[Check it out](/protos/guess_number.proto)!
+Generate:
+```bash
+protoc --proto_path=./proto --go_out=./generated/go --go-grpc_out=./generated/go ./proto/stock_picker.proto
+```
 
-## Programming Languages
+It should generate a few `*.pb.go` at `/generated/go/*`.
 
-1. [Go](/go/README.md)
+
+### Usage
+
+1. [Docker Compose](#docker-compose) (C'mon, much easier life)
+2. [Docker](#docker) (Otherwise...)
+
+#### Docker Compose
+
+As simple as that
+
+```bash
+docker-compose up
+```
+
+#### Docker
+
+Since we're establishing a connection, it's important to create our own network :)
+
+```bash
+docker network create grpc-network
+```
+
+##### Server
+
+```bash
+docker build . -t server --progress=plain
+docker run -d --name server --network grpc-network -p 50051:50051 server
+```
+
+##### Client
+
+```bash
+docker build . -t client --progress=plain
+docker run --network grpc-network client
+```

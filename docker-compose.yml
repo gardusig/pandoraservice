@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "50051:50051"
+    networks:
+      - grpc-network
+
+  client:
+    build:
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - grpc-network
+
+networks:
+  grpc-network:

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package stock_picker;
+
+option go_package = "stock_picker_proto/generated/models";
+
+service StockPickerService {
+  rpc GetStockPriceFluctuation (GetStockFluctuationRequest) returns (GetStockFluctuationResponse) {}
+}
+
+message GetStockFluctuationRequest {
+  string name = 1;
+  string ticker = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+}
+
+message GetStockFluctuationResponse {
+  double before = 1;
+  double after = 2;
+}
