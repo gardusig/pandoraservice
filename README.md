@@ -1,10 +1,8 @@
-# Summary
+## Summary
 
 Repository used as a foundation example of how to setup client and server using gRPC. Execution details at GitHub actions.
 
-## Proto
-
-#### Go
+### Proto
 
 Install:
 
