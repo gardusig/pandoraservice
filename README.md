@@ -6,7 +6,7 @@ The goal of this project is to document the setup for establishing a gRPC commun
 
 Guess the number and receive a $PandoraBox$. Beware that it's initially locked and you must ask the server to open it for you :)
 
-![Wuya](images/wuya.webp) ![Pandora box](images/pandora.webp) ![Wuya](images/wuya.jpg)
+![Pandora box](images/pandora.webp) ![Wuya](images/wuya.jpg)
 
 ### Rules
 
