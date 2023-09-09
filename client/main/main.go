@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	"client/generated/models"
-
+	"github.com/gardusig/grpc_service/generated"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -15,6 +15,10 @@ import (
 var (
 	port = flag.Int("port", 50051, "The server port")
 )
+
+func init() {
+	logrus.SetLevel(logrus.DebugLevel)
+}
 
 func main() {
 	conn, err := grpc.Dial(
@@ -25,18 +29,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	// Create a client instance using the gRPC connection
-	client := models.NewStockPickerServiceClient(conn)
-
-	// Call the GetStockPriceFluctuation method
-	req := &models.GetStockFluctuationRequest{
-		// Set the required fields in the request message
+	client := generated.NewPandoraServiceClient(conn)
+	request := generated.GuessNumberRequest{
+		Number: 420,
 	}
-	resp, err := client.GetStockPriceFluctuation(context.Background(), req)
+	resp, err := client.GuessNumber(context.Background(), &request)
 	if err != nil {
 		log.Fatalf("failed to get stock price fluctuation: %v", err)
 	}
-
-	// Process the response
-	fmt.Printf("Before: %f, After: %f\n", resp.Before, resp.After)
+	logrus.Debug("response: ", *resp.Result)
 }
