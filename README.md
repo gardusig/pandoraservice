@@ -29,8 +29,8 @@ Beware that it's initially locked and you must ask the server to open it for you
 - Given that your computer probably can't process more than $10^{10}$ operations in a second, a naive approach of guessing each possible number would take at least $50$ years to execute
   - Worst case: $16 * 10^{18}$ operations
   - Operations per second: $10^{10}$
-  - Total seconds: $16*10^{8}$
-  - In years: $50$
+  - Total in seconds: $16*10^{8}$
+  - Total in years: $50$
 - There is in fact one algorithm capable of solving this question a bit faster - $BinarySearch$
   - Instead of guessing each number, you can benefit from the server response to avoid making unnecessary guesses
   - The server response always tell you if the answer is less or greater. If it's less, making guesses with greater numbers does not help. Neither if it's greater would make sense to make a guess with lesser numbers.
