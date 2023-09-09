@@ -5,15 +5,15 @@ package pandora_service;
 option go_package = "generated/";
 
 service PandoraService {
-  rpc GuessPassword (GuessPasswordRequest) returns (GuessPasswordResponse) {}
+  rpc GuessNumber (GuessNumberRequest) returns (GuessNumberResponse) {}
   rpc OpenBox (LockedPandoraBox) returns (OpenedPandoraBox) {}
 }
 
-message GuessPasswordRequest {
+message GuessNumberRequest {
   int64 number = 1;
 }
 
-message GuessPasswordResponse {
+message GuessNumberResponse {
   optional string result = 1;
   optional string LockedPandoraBox = 2;
 }
