@@ -1,6 +1,6 @@
 module github.com/gardusig/grpc_service/generated
 
-go 1.17
+go 1.21
 
 require (
 	google.golang.org/grpc v1.58.0
