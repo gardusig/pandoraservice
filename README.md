@@ -10,7 +10,7 @@ Guess the right number and receive a $PandoraBox$.
 
 Beware that it's initially locked and you must ask the server to open it for you :)
 
-![OpenedBox](images/opened.jpg)
+![OpenedBox](images/opened.jpg) ![Box](images/closed_box.png)
 
 ### Rules
 
@@ -38,8 +38,6 @@ Beware that it's initially locked and you must ask the server to open it for you
     - Worst case goes from $O(N)$ to $O(log_2(N))$
       - Where $N$ is the amount of possible values: $\approx 16 * 10^{18}$
       - Which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18}) \approxeq 64$
-
-![Box](images/closed_box.png)
 
 ### Protocol Buffers
 
