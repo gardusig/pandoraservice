@@ -6,11 +6,11 @@ The goal of this project is to document the setup for establishing a gRPC commun
 
 Guess the right number and receive a $PandoraBox$.
 
-![Wuya](images/wuya.webp) ![Pandora box](images/pandora.webp) ![OpenedBox](images/opened.jpg)
+![Wuya](images/wuya.webp) ![Pandora box](images/pandora.webp)
 
 Beware that it's initially locked and you must ask the server to open it for you :)
 
-![Wuya](images/wuya.jpg)
+[OpenedBox](images/opened.jpg)
 
 ### Rules
 
