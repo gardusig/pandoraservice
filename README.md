@@ -4,7 +4,7 @@ The goal of this project is to document the setup for establishing a gRPC commun
 
 ## Statements
 
-Guess the number and receive a $PandoraBox$.
+Guess the right number and receive a $PandoraBox$ prize.
 
 ![Wuya](images/wuya.webp) ![Pandora box](images/pandora.webp)
 
