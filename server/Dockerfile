@@ -1,6 +1,6 @@
 # Use a multi-stage build to keep the final image small
 # Stage 1: Build the Go binary
-FROM golang:1.17-alpine AS build
+FROM golang:1.21-alpine AS build
 
 # Set the working directory inside the container
 WORKDIR /app
