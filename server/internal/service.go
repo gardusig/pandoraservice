@@ -16,7 +16,7 @@ type PandoraService struct {
 	generated.UnimplementedPandoraServiceServer
 }
 
-func (s *PandoraService) GetStockPriceFluctuation(ctx context.Context, req *generated.GuessNumberRequest) (*generated.GuessNumberResponse, error) {
+func (s *PandoraService) GuessNumber(ctx context.Context, req *generated.GuessNumberRequest) (*generated.GuessNumberResponse, error) {
 	guess := req.Number
 	logrus.Debug("Received request at server with number: ", guess)
 	if guess < minThreshold {
