@@ -6,7 +6,7 @@ The goal of this project is to document the setup for establishing a gRPC commun
 
 Guess the right number and receive a $PandoraBox$.
 
-![PandoraBox](images/pandora_box.webp)
+![Wuya](images/wuya.webp) ![PandoraBox](images/box.webp)
 
 Beware that it's initially locked and you must ask the server to open it for you :)
 
@@ -38,7 +38,8 @@ Beware that it's initially locked and you must ask the server to open it for you
     - Worst case goes from $O(N)$ to $O(log_2(N))$
       - Where $N$ is the amount of possible values: $\approx 16 * 10^{18}$
       - Which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18}) \approxeq 64$
-- This is my favorite algorithm :)
+
+![Box](images/closed_box.png)
 
 ### Protocol Buffers
 
