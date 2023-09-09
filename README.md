@@ -39,6 +39,8 @@ Beware that it's initially locked and you must ask the server to open it for you
       - Where $N$ is the amount of possible values: $\approx 16 * 10^{18}$
       - Which also happens to be quite close to the amount of possible numbers to fit inside a 64-bit integer: $log_2(16 * 10^{18}) \approxeq 64$
 
+![Box](images/closed_box.png)
+
 ### Protocol Buffers
 
 There are two defined procedures to be remotely called. [Check it out](/proto/pandora.proto)!
