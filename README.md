@@ -10,7 +10,7 @@ Guess the right number and receive a $PandoraBox$.
 
 Beware that it's initially locked and you must ask the server to open it for you :)
 
-![OpenedBox](images/opened.jpg) ![Box](images/closed_box.png)
+![OpenedBox](images/opened.jpg)
 
 ### Rules
 
