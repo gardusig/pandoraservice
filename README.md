@@ -4,7 +4,9 @@ The goal of this project is to document the setup for establishing a gRPC commun
 
 ## Statements
 
-Guess the number and receive a `PandoraBox`. Beware that it's initially locked and you must ask the server to open it for you :)
+Guess the number and receive a $PandoraBox$. Beware that it's initially locked and you must ask the server to open it for you :)
+
+![Pandora box](pandora.jpeg)
 
 ### Rules
 
@@ -15,8 +17,8 @@ Guess the number and receive a `PandoraBox`. Beware that it's initially locked a
   - $<$ if given number is less than special number
   - $>$ if given number is greater than special number
   - $=$ if given number is equal to special number
-- A right guess will return a `LockedPandoraBox` object
-  - The response will have an `OpenedPandoraBox` object with a message
+- A right guess will return a $LockedPandoraBox$ object
+  - The response will have an $OpenedPandoraBox$ object with a message
 
 ### Observations
 
