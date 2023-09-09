@@ -55,15 +55,19 @@ There are two defined procedures to be remotely called. [Check it out](/proto/pa
 ```bash
 brew install protobuf
 brew install protoc-gen-go
+brew install protoc-gen-go-grpc
 ```
 
 #### Generate:
 
 ```bash
-protoc --go_out=. pandora.proto
+protoc --go_out=. --go-grpc_out=. proto/pandora.proto
 ```
 
-It should generate a `pandora.pb.go` file at `/generated`.
+It should generate these files under `/generated` folder:
+
+- `pandora_grpc.pb.go`
+- `pandora.pb.go`
 
 ### Usage
 
