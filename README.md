@@ -1,6 +1,6 @@
 ## Summary
 
-The goal of this project is to document the setup for establishing a gRPC communication between a server and its clients. Execution details at GitHub actions.
+The goal of this project is to document the setup for establishing a gRPC communication between a server and its clients. Execution details at GitHub Actions.
 
 ## Statements
 
@@ -17,12 +17,14 @@ Beware that it's initially locked and you must ask the server to open it for you
 - A special number is randomly generated at the server startup
   - Guessed numbers must lie within the interval: $[-4 * 10^{18}, +4 * 10^{18}]$
   - It gets updated every time a guess is correctly made by a client
-- For each guess, the server will respond with:
+- For each guess at `GuessNumber` $rpc$, the server will respond with:
   - $<$ if given number is less than special number
   - $>$ if given number is greater than special number
   - $=$ if given number is equal to special number
 - A right guess will return a $LockedPandoraBox$ object
-  - The response will have an $OpenedPandoraBox$ object with a message
+  - It contains an encrypted message
+- You can ask the server to open it at `OpenBox` $rpc$
+  - The response will have an $OpenedPandoraBox$ object with a decrypted message
 
 ### Observations
 
