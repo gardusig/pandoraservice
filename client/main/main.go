@@ -1,13 +1,12 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
-	"log"
 
-	"client/generated/models"
-
+	"github.com/gardusig/grpc_service/client/internal"
+	"github.com/gardusig/grpc_service/generated"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,27 +15,23 @@ var (
 	port = flag.Int("port", 50051, "The server port")
 )
 
+func init() {
+	logrus.SetLevel(logrus.DebugLevel)
+}
+
 func main() {
 	conn, err := grpc.Dial(
 		fmt.Sprintf("server:%d", *port),
-		grpc.WithTransportCredentials(insecure.NewCredentials()))
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
-		log.Fatalf("failed to connect: %v", err)
+		panic(fmt.Sprintf("failed to connect: %v", err))
 	}
 	defer conn.Close()
-
-	// Create a client instance using the gRPC connection
-	client := models.NewStockPickerServiceClient(conn)
-
-	// Call the GetStockPriceFluctuation method
-	req := &models.GetStockFluctuationRequest{
-		// Set the required fields in the request message
-	}
-	resp, err := client.GetStockPriceFluctuation(context.Background(), req)
+	client := generated.NewPandoraServiceClient(conn)
+	lockedPandoraBox, err := internal.GetLockedPandoraBox(client)
 	if err != nil {
-		log.Fatalf("failed to get stock price fluctuation: %v", err)
+		panic(fmt.Sprintf("failed to guess right number: %v", err))
 	}
-
-	// Process the response
-	fmt.Printf("Before: %f, After: %f\n", resp.Before, resp.After)
+	logrus.Debug("encrypted message: ", *lockedPandoraBox)
 }
