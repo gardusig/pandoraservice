@@ -27,7 +27,7 @@ func NewNumberGuesser(client generated.PandoraServiceClient) NumberGuesser {
 	}
 }
 
-func (g NumberGuesser) GetLockedPandoraBox() (*string, error) {
+func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
 	for g.lowerBound <= g.upperBound {
 		response, err := g.makeNextGuess()
 		if err != nil {
@@ -66,7 +66,7 @@ func (g *NumberGuesser) updateBoundaries(guess int64, response string) error {
 	return fmt.Errorf("Unexpected response from server: %v", response)
 }
 
-func (g NumberGuesser) sendGuessRequest(guess int64) (*generated.GuessNumberResponse, error) {
+func (g *NumberGuesser) sendGuessRequest(guess int64) (*generated.GuessNumberResponse, error) {
 	request := generated.GuessNumberRequest{
 		Number: guess,
 	}
