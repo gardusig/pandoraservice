@@ -1,6 +1,8 @@
 package internal
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 var randomNumber int64
 

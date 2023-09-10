@@ -9,4 +9,4 @@ var (
 	greater = ">"
 )
 
-var encryptedMessage = "something interesting"
+var encryptedMessage = "important encrypted message"
