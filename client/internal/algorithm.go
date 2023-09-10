@@ -3,9 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/gardusig/grpc_service/generated"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/status"
 )
 
 const maxRetryAttempt = 3
@@ -69,14 +71,17 @@ func (g NumberGuesser) sendGuessRequest(guess int64) (*generated.GuessNumberResp
 		Number: guess,
 	}
 	for attempt := 0; attempt < maxRetryAttempt; attempt += 1 {
+		if attempt > 0 {
+			time.Sleep(1 << time.Duration(attempt) * time.Second)
+		}
 		resp, err := g.client.GuessNumber(context.Background(), &request)
 		if err == nil {
 			return resp, nil
 		}
-		// if grpc.StatusCode(err) == grpc.StatusCode.Unavailable {
-		// 	continue
-		// }
-		return nil, err
+		_, ok := status.FromError(err)
+		if !ok {
+			return nil, err
+		}
 	}
 	return nil, fmt.Errorf("Failed to make guess request after %v attempts", maxRetryAttempt)
 }
