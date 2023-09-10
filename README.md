@@ -92,7 +92,7 @@ docker network create grpc-network
 
 ```bash
 docker build . -t server --progress=plain
-docker run -d --name server --network grpc-network -p 50051:50051 server
+docker run --network grpc-network -p 50051:50051 server
 ```
 
 ##### Client
