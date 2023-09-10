@@ -29,7 +29,8 @@ func main() {
 	}
 	defer conn.Close()
 	client := generated.NewPandoraServiceClient(conn)
-	lockedPandoraBox, err := internal.GetLockedPandoraBox(client)
+	numberGuesser := internal.NewNumberGuesser(client)
+	lockedPandoraBox, err := numberGuesser.GetLockedPandoraBox()
 	if err != nil {
 		panic(fmt.Sprintf("failed to guess right number: %v", err))
 	}
