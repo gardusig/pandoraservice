@@ -3,35 +3,85 @@ package internal
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/gardusig/grpc_service/generated"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/status"
 )
 
-func GetLockedPandoraBox(client generated.PandoraServiceClient) (*string, error) {
-	lowerBound := minThreshold
-	upperBound := maxThreshold
-	for lowerBound <= upperBound {
-		mid := lowerBound + ((upperBound - lowerBound) >> 1)
-		logrus.Debug("lowerBound:", lowerBound, ", upperBound:", upperBound, ", mid:", mid)
-		request := generated.GuessNumberRequest{
-			Number: int64(mid),
-		}
-		resp, err := client.GuessNumber(context.Background(), &request)
+const maxRetryAttempt = 3
+
+type NumberGuesser struct {
+	client generated.PandoraServiceClient
+
+	lowerBound int64
+	upperBound int64
+}
+
+func NewNumberGuesser(client generated.PandoraServiceClient) NumberGuesser {
+	return NumberGuesser{
+		client:     client,
+		lowerBound: minThreshold,
+		upperBound: maxThreshold,
+	}
+}
+
+func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
+	for g.lowerBound <= g.upperBound {
+		response, err := g.makeNextGuess()
 		if err != nil {
 			return nil, err
 		}
-		logrus.Debug("server response:", *resp.Result)
-		if *resp.Result == equal {
-			return resp.LockedPandoraBox, nil
-		}
-		if *resp.Result == greater {
-			upperBound = mid - 1
-		} else if *resp.Result == less {
-			lowerBound = mid + 1
-		} else {
-			return nil, fmt.Errorf("Unexpected response from server: %v", *resp.Result)
+		if response != nil {
+			return response, nil
 		}
 	}
 	return nil, fmt.Errorf("Failed to get right number :/")
+}
+
+func (g *NumberGuesser) makeNextGuess() (*string, error) {
+	guess := g.lowerBound + ((g.upperBound - g.lowerBound) >> 1)
+	logrus.Debug("lowerBound:", g.lowerBound, ", upperBound:", g.upperBound, ", guess:", guess)
+	resp, err := g.sendGuessRequest(guess)
+	if resp == nil || err != nil {
+		return nil, err
+	}
+	logrus.Debug("server response:", resp.Result)
+	if resp.Result == equal {
+		return resp.LockedPandoraBox, nil
+	}
+	return nil, g.updateBoundaries(guess, resp.Result)
+}
+
+func (g *NumberGuesser) updateBoundaries(guess int64, response string) error {
+	if response == greater {
+		g.upperBound = guess - 1
+		return nil
+	}
+	if response == less {
+		g.lowerBound = guess + 1
+		return nil
+	}
+	return fmt.Errorf("Unexpected response from server: %v", response)
+}
+
+func (g *NumberGuesser) sendGuessRequest(guess int64) (*generated.GuessNumberResponse, error) {
+	request := generated.GuessNumberRequest{
+		Number: guess,
+	}
+	for attempt := 0; attempt < maxRetryAttempt; attempt += 1 {
+		if attempt > 0 {
+			time.Sleep(1 << time.Duration(attempt) * time.Second)
+		}
+		resp, err := g.client.GuessNumber(context.Background(), &request)
+		if err == nil {
+			return resp, nil
+		}
+		_, ok := status.FromError(err)
+		if !ok {
+			return nil, err
+		}
+	}
+	return nil, fmt.Errorf("Failed to make guess request after %v attempts", maxRetryAttempt)
 }

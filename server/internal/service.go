@@ -27,7 +27,8 @@ func (s *PandoraService) GuessNumber(ctx context.Context, req *generated.GuessNu
 	}
 	result := validateGuess(req.Number)
 	response := generated.GuessNumberResponse{
-		Result: &result,
+		Result:           result,
+		LockedPandoraBox: nil,
 	}
 	if result == equal {
 		response.LockedPandoraBox = &encryptedMessage
