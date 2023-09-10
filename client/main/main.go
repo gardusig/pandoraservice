@@ -1,11 +1,10 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
-	"log"
 
+	"github.com/gardusig/grpc_service/client/internal"
 	"github.com/gardusig/grpc_service/generated"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -20,26 +19,19 @@ func init() {
 	logrus.SetLevel(logrus.DebugLevel)
 }
 
-func makeRequest(client generated.PandoraServiceClient) {
-	request := generated.GuessNumberRequest{
-		Number: 420,
-	}
-	resp, err := client.GuessNumber(context.Background(), &request)
-	if err != nil {
-		log.Fatal("failed to guess number: ", err)
-	}
-	logrus.Debug("response: ", *resp.Result)
-}
-
 func main() {
 	conn, err := grpc.Dial(
 		fmt.Sprintf("server:%d", *port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		log.Fatalf("failed to connect: %v", err)
+		panic(fmt.Sprintf("failed to connect: %v", err))
 	}
 	defer conn.Close()
 	client := generated.NewPandoraServiceClient(conn)
-	makeRequest(client)
+	lockedPandoraBox, err := internal.GetLockedPandoraBox(client)
+	if err != nil {
+		panic(fmt.Sprintf("failed to guess right number: %v", err))
+	}
+	logrus.Debug("encrypted message: ", *lockedPandoraBox)
 }
