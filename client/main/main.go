@@ -20,22 +20,26 @@ func init() {
 	logrus.SetLevel(logrus.DebugLevel)
 }
 
-func main() {
-	conn, err := grpc.Dial(
-		fmt.Sprintf("server:%d", *port),
-		grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("failed to connect: %v", err)
-	}
-	defer conn.Close()
-
-	client := generated.NewPandoraServiceClient(conn)
+func makeRequest(client generated.PandoraServiceClient) {
 	request := generated.GuessNumberRequest{
 		Number: 420,
 	}
 	resp, err := client.GuessNumber(context.Background(), &request)
 	if err != nil {
-		log.Fatalf("failed to get stock price fluctuation: %v", err)
+		log.Fatal("failed to guess number: ", err)
 	}
 	logrus.Debug("response: ", *resp.Result)
+}
+
+func main() {
+	conn, err := grpc.Dial(
+		fmt.Sprintf("server:%d", *port),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		log.Fatalf("failed to connect: %v", err)
+	}
+	defer conn.Close()
+	client := generated.NewPandoraServiceClient(conn)
+	makeRequest(client)
 }
