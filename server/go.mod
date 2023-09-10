@@ -3,7 +3,7 @@ module github.com/gardusig/grpc_service/server
 go 1.21
 
 require (
-	github.com/gardusig/grpc_service/generated v0.0.0-20230909193521-e9f528adafa7
+	github.com/gardusig/grpc_service/generated v0.0.0-20230910210400-f993468c51d2
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/grpc v1.58.0
 )
