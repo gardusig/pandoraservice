@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        DOCKERFILE_PATH:
-          - client/Dockerfile
-          - server/Dockerfile
+        DOCKERFILE_DIR:
+          - client
+          - server
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,8 +30,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ${{ matrix.DOCKERFILE_PATH }}
+          context: ${{ matrix.DOCKERFILE_DIR }}
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
