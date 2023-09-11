@@ -1,9 +1,8 @@
 name: Build and Publish Container
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   build_and_publish:
