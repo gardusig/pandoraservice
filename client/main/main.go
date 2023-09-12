@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/gardusig/grpc_service/client/internal"
-	"github.com/gardusig/grpc_service/generated"
+	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -28,7 +28,7 @@ func main() {
 		panic(fmt.Sprintf("failed to connect: %v", err))
 	}
 	defer conn.Close()
-	client := generated.NewPandoraServiceClient(conn)
+	client := pandoraproto.NewPandoraServiceClient(conn)
 	numberGuesser := internal.NewNumberGuesser(client)
 	lockedPandoraBox, err := numberGuesser.GetLockedPandoraBox()
 	if err != nil {
