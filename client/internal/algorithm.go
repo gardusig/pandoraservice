@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gardusig/grpc_service/generated"
+	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/status"
 )
@@ -13,13 +13,13 @@ import (
 const maxRetryAttempt = 3
 
 type NumberGuesser struct {
-	client generated.PandoraServiceClient
+	client pandoraproto.PandoraServiceClient
 
 	lowerBound int64
 	upperBound int64
 }
 
-func NewNumberGuesser(client generated.PandoraServiceClient) NumberGuesser {
+func NewNumberGuesser(client pandoraproto.PandoraServiceClient) NumberGuesser {
 	return NumberGuesser{
 		client:     client,
 		lowerBound: minThreshold,
@@ -66,8 +66,8 @@ func (g *NumberGuesser) updateBoundaries(guess int64, response string) error {
 	return fmt.Errorf("Unexpected response from server: %v", response)
 }
 
-func (g *NumberGuesser) sendGuessRequest(guess int64) (*generated.GuessNumberResponse, error) {
-	request := generated.GuessNumberRequest{
+func (g *NumberGuesser) sendGuessRequest(guess int64) (*pandoraproto.GuessNumberResponse, error) {
+	request := pandoraproto.GuessNumberRequest{
 		Number: guess,
 	}
 	for attempt := 0; attempt < maxRetryAttempt; attempt += 1 {
