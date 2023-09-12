@@ -1,8 +1,8 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/gardusig/grpc_service/generated v0.0.0-20230910210400-f993468c51d2 h1:va/SYwabN8yOemIeU7j+FPR/SEh1fXPrNHdoNro3/Pc=
-github.com/gardusig/grpc_service/generated v0.0.0-20230910210400-f993468c51d2/go.mod h1:2ow5p7/ZOpcZU3Z49XdRKSANxCkiTykdOvOZrVGeTic=
+github.com/gardusig/pandoraproto/generated/go v0.0.0-20230912105406-480c75a9f29f h1:hSr/S7QAROx5BYW0IZA9crTAvgxWolb50cluEFOD9Uc=
+github.com/gardusig/pandoraproto/generated/go v0.0.0-20230912105406-480c75a9f29f/go.mod h1:F4IqfmQyxdyHmE0ebshabz4qdCF3WkvunRefmCCKcwc=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
 github.com/golang/protobuf v1.5.3 h1:KhyjKVUg7Usr/dYsdSqoFveMYd5ko72D+zANwlG1mmg=
 github.com/golang/protobuf v1.5.3/go.mod h1:XVQd3VNwM+JqD3oG2Ue2ip4fOMUkwXdXDdiuN0vRsmY=

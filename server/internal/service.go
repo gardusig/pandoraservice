@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gardusig/grpc_service/generated"
+	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,10 +13,10 @@ func init() {
 }
 
 type PandoraService struct {
-	generated.UnimplementedPandoraServiceServer
+	pandoraproto.UnimplementedPandoraServiceServer
 }
 
-func (s *PandoraService) GuessNumber(ctx context.Context, req *generated.GuessNumberRequest) (*generated.GuessNumberResponse, error) {
+func (s *PandoraService) GuessNumber(ctx context.Context, req *pandoraproto.GuessNumberRequest) (*pandoraproto.GuessNumberResponse, error) {
 	guess := req.Number
 	logrus.Debug("Received request at server with number: ", guess)
 	if guess < minThreshold {
@@ -26,7 +26,7 @@ func (s *PandoraService) GuessNumber(ctx context.Context, req *generated.GuessNu
 		return nil, fmt.Errorf("Guess must be at most %v", maxThreshold)
 	}
 	result := validateGuess(req.Number)
-	response := generated.GuessNumberResponse{
+	response := pandoraproto.GuessNumberResponse{
 		Result:           result,
 		LockedPandoraBox: nil,
 	}

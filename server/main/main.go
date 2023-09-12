@@ -6,10 +6,11 @@ import (
 	"log"
 	"net"
 
-	"github.com/gardusig/grpc_service/generated"
 	"github.com/gardusig/grpc_service/server/internal"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+
+	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 )
 
 var (
@@ -27,7 +28,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	generated.RegisterPandoraServiceServer(s, &internal.PandoraService{})
+	pandoraproto.RegisterPandoraServiceServer(s, &internal.PandoraService{})
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
