@@ -1,10 +1,11 @@
-package internal
+package guesser
 
 import (
 	"context"
 	"fmt"
 	"time"
 
+	"github.com/gardusig/grpc_service/internal"
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/status"
@@ -22,8 +23,8 @@ type NumberGuesser struct {
 func NewNumberGuesser(client pandoraproto.PandoraServiceClient) NumberGuesser {
 	return NumberGuesser{
 		client:     client,
-		lowerBound: minThreshold,
-		upperBound: maxThreshold,
+		lowerBound: internal.MinThreshold,
+		upperBound: internal.MaxThreshold,
 	}
 }
 
@@ -48,18 +49,18 @@ func (g *NumberGuesser) makeNextGuess() (*string, error) {
 		return nil, err
 	}
 	logrus.Debug("server response:", resp.Result)
-	if resp.Result == equal {
+	if resp.Result == internal.Equal {
 		return resp.LockedPandoraBox, nil
 	}
 	return nil, g.updateBoundaries(guess, resp.Result)
 }
 
 func (g *NumberGuesser) updateBoundaries(guess int64, response string) error {
-	if response == greater {
+	if response == internal.Greater {
 		g.upperBound = guess - 1
 		return nil
 	}
-	if response == less {
+	if response == internal.Less {
 		g.lowerBound = guess + 1
 		return nil
 	}

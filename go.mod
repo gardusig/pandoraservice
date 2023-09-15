@@ -1,4 +1,4 @@
-module github.com/gardusig/grpc_service/server
+module github.com/gardusig/grpc_service
 
 go 1.21
 
