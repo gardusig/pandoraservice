@@ -3,7 +3,6 @@ package pandora
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/gardusig/grpc_service/database"
@@ -13,25 +12,31 @@ import (
 	"google.golang.org/grpc"
 )
 
-func init() {
-	database.ShuffleSpecialNumber()
-}
-
-func StartPandoraServer() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", pandoraServicePort))
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pandoraproto.RegisterPandoraServiceServer(s, &PandoraServiceServer{})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-}
-
 type PandoraServiceServer struct {
 	pandoraproto.UnimplementedPandoraServiceServer
+
+	db *database.SpecialNumberDb
+}
+
+func NewPandoraServiceServer() *PandoraServiceServer {
+	return &PandoraServiceServer{
+		db: database.NewSpecialNumberDb(),
+	}
+}
+
+func StartPandoraServer() error {
+	serverChan := make(chan error, 1)
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", internal.PandoraServicePort))
+	if err != nil {
+		return fmt.Errorf("failed to listen: %v", err)
+	}
+	logrus.Debug("started listener at: ", lis.Addr())
+	server := grpc.NewServer()
+	pandoraproto.RegisterPandoraServiceServer(server, &PandoraServiceServer{})
+	logrus.Debug("created channel")
+	go startServer(server, lis, serverChan)
+	go monitorServerStatus(serverChan)
+	return nil
 }
 
 func (s *PandoraServiceServer) GuessNumber(ctx context.Context, req *pandoraproto.GuessNumberRequest) (*pandoraproto.GuessNumberResponse, error) {
@@ -43,7 +48,7 @@ func (s *PandoraServiceServer) GuessNumber(ctx context.Context, req *pandoraprot
 	if guess > internal.MaxThreshold {
 		return nil, fmt.Errorf("Guess must be at most %v", internal.MaxThreshold)
 	}
-	result := database.ValidateGuess(req.Number)
+	result := s.db.ValidateGuess(req.Number)
 	response := pandoraproto.GuessNumberResponse{
 		Result:           result,
 		LockedPandoraBox: nil,
@@ -52,4 +57,15 @@ func (s *PandoraServiceServer) GuessNumber(ctx context.Context, req *pandoraprot
 		response.LockedPandoraBox = &internal.EncryptedMessage
 	}
 	return &response, nil
+}
+
+func startServer(server *grpc.Server, listener net.Listener, serverChan chan error) {
+	serverChan <- server.Serve(listener)
+}
+
+func monitorServerStatus(serverChan chan error) {
+	select {
+	case err := <-serverChan:
+		panic(fmt.Errorf("failed to start server: %v", err))
+	}
 }

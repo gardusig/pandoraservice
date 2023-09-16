@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-const maxRetryAttempt = 3
+const maxRetryAttempt = 5
 
 type NumberGuesser struct {
 	client pandoraproto.PandoraServiceClient
@@ -22,13 +22,13 @@ type NumberGuesser struct {
 
 func NewNumberGuesser(client pandoraproto.PandoraServiceClient) NumberGuesser {
 	return NumberGuesser{
-		client:     client,
-		lowerBound: internal.MinThreshold,
-		upperBound: internal.MaxThreshold,
+		client: client,
 	}
 }
 
 func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
+	g.upperBound = internal.MinThreshold
+	g.upperBound = internal.MaxThreshold
 	for g.lowerBound <= g.upperBound {
 		response, err := g.makeNextGuess()
 		if err != nil {
@@ -38,7 +38,7 @@ func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
 			return response, nil
 		}
 	}
-	return nil, fmt.Errorf("Failed to get right number :/")
+	return nil, fmt.Errorf("Failed to guess the right number :/")
 }
 
 func (g *NumberGuesser) makeNextGuess() (*string, error) {

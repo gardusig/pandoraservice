@@ -3,28 +3,33 @@ package pandora
 import (
 	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/gardusig/grpc_service/guesser"
+	"github.com/gardusig/grpc_service/internal"
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 )
 
-func StartClient() {
+type PandoraServiceClient struct {
+	connection    *grpc.ClientConn
+	ServiceClient pandoraproto.PandoraServiceClient
+}
+
+func NewPandoraServiceClient() (*PandoraServiceClient, error) {
 	conn, err := grpc.Dial(
-		fmt.Sprintf("server:%s", pandoraServicePort),
+		fmt.Sprintf("server:%s", internal.PandoraServicePort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		panic(fmt.Sprintf("failed to connect: %v", err))
+		return nil, err
 	}
-	defer conn.Close()
 	client := pandoraproto.NewPandoraServiceClient(conn)
-	numberGuesser := guesser.NewNumberGuesser(client)
-	lockedPandoraBox, err := numberGuesser.GetLockedPandoraBox()
-	if err != nil {
-		panic(fmt.Sprintf("failed to guess right number: %v", err))
-	}
-	logrus.Debug("encrypted message: ", *lockedPandoraBox)
+	return &PandoraServiceClient{
+		connection:    conn,
+		ServiceClient: client,
+	}, nil
+}
+
+func (c *PandoraServiceClient) CloseConnection() {
+	c.connection.Close()
 }
