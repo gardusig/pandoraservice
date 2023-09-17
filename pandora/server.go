@@ -37,18 +37,35 @@ func (s *PandoraServiceServer) Start() error {
 }
 
 func (s *PandoraServiceServer) GuessNumber(ctx context.Context, req *pandoraproto.GuessNumberRequest) (*pandoraproto.GuessNumberResponse, error) {
-	logrus.Debug("Received request at server, level: ", req.Level, ", guess: ", req.Number)
+	logrus.Debug("server: GuessNumber request, level: ", req.Level, ", guessNumber: ", req.Number)
 	err := validateGuessNumberRequest(req)
 	if err != nil {
 		return nil, err
 	}
-	result := s.db.ValidateGuess(req.Level, req.Number)
+	result, encryptedMessage, err := s.db.ValidateGuess(req.Level, req.Number)
+	if err != nil {
+		return nil, err
+	}
 	response := pandoraproto.GuessNumberResponse{
 		Result:           result,
 		LockedPandoraBox: nil,
 	}
 	if result == internal.Equal {
-		response.LockedPandoraBox = &internal.EncryptedMessage
+		response.LockedPandoraBox = &pandoraproto.LockedPandoraBox{
+			EncryptedMessage: *encryptedMessage,
+		}
+	}
+	return &response, nil
+}
+
+func (s *PandoraServiceServer) OpenBox(ctx context.Context, req *pandoraproto.LockedPandoraBox) (*pandoraproto.OpenedPandoraBox, error) {
+	logrus.Debug("server: OpenBox request, encryptedMessage: ", req.EncryptedMessage)
+	decryptedMessage, err := s.db.ValidateLockedPandoraBox(0, req.EncryptedMessage)
+	if err != nil {
+		return nil, err
+	}
+	response := pandoraproto.OpenedPandoraBox{
+		Message: decryptedMessage,
 	}
 	return &response, nil
 }
