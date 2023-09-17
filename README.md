@@ -43,37 +43,8 @@ Beware that it's initially locked and you must ask the server to open it for you
 
 Module created at separate repository. [Check it out](https://github.com/gardusig/pandoraproto)!
 
-### Usage
-
-1. [Docker Compose](#docker-compose) (C'mon, much easier life)
-2. [Docker](#docker) (Otherwise...)
-
-#### Docker Compose
-
-As simple as that
+#### Running
 
 ```bash
-docker-compose up
-```
-
-#### Docker
-
-Since we're establishing a connection, it's important to create our own network :)
-
-```bash
-docker network create grpc-network
-```
-
-##### Server
-
-```bash
-docker build . -t server --progress=plain
-docker run --network grpc-network -p 50051:50051 server
-```
-
-##### Client
-
-```bash
-docker build . -t client --progress=plain
-docker run --network grpc-network client
+docker build -t grpc_service --progress=plain .
 ```
