@@ -27,7 +27,7 @@ func NewNumberGuesser(client pandoraproto.PandoraServiceClient) NumberGuesser {
 }
 
 func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
-	g.upperBound = internal.MinThreshold
+	g.lowerBound = internal.MinThreshold
 	g.upperBound = internal.MaxThreshold
 	for g.lowerBound <= g.upperBound {
 		response, err := g.makeNextGuess()
