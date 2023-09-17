@@ -8,8 +8,8 @@ const (
 )
 
 const (
-	MinThreshold = -4000000000000000000
-	MaxThreshold = +4000000000000000000
+	MinThreshold int64 = -4000000000000000000
+	MaxThreshold int64 = +4000000000000000000
 )
 
 var (
