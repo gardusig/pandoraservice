@@ -1,11 +1,9 @@
 package test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/gardusig/grpc_service/guesser"
-	"github.com/gardusig/grpc_service/internal"
 	"github.com/gardusig/grpc_service/pandora"
 	"github.com/sirupsen/logrus"
 )
@@ -24,16 +22,17 @@ func TestServerSetup(t *testing.T) {
 	logrus.Debug("started server")
 	client, err := pandora.NewPandoraServiceClient()
 	if err != nil {
-		panic(fmt.Errorf("failed to connect: %v", err))
+		t.Fatalf("failed to connect: %v", err)
 	}
 	logrus.Debug("started client")
-	numberGuesser := guesser.NewNumberGuesser(client.ServiceClient)
+	guesser := guesser.NewGuesser(client.ServiceClient)
 	logrus.Debug("created number guesser")
-	lockedPandoraBox, err := numberGuesser.GetLockedPandoraBox()
+	openedPandoraBox, err := guesser.GetPandoraBox()
 	if err != nil {
-		panic(fmt.Sprintf("failed to guess right number: %v", err))
+		t.Fatalf("failed to guess right number: %v", err)
 	}
-	if *lockedPandoraBox != internal.EncryptedMessage {
-		t.Fatalf("Expected message: %s, received message: %s", internal.EncryptedMessage, *lockedPandoraBox)
+	if openedPandoraBox == nil {
+		t.Fatalf("expected opened pandora box, got nil instead")
 	}
+	logrus.Debug("message: ", openedPandoraBox.Message)
 }

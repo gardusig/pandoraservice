@@ -21,8 +21,6 @@ var (
 	Greater = ">"
 )
 
-var EncryptedMessage = "important encrypted message"
-
 var PandoraServicePort string
 
 func init() {
