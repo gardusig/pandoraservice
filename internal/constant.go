@@ -8,8 +8,11 @@ const (
 )
 
 const (
-	MinThreshold int64 = -4000000000000000000
-	MaxThreshold int64 = +4000000000000000000
+	LevelMinThreshold uint32 = 0
+	LevelMaxThreshold uint32 = 1000
+
+	GuessMinThreshold int64 = -4000000000000000000
+	GuessMaxThreshold int64 = +4000000000000000000
 )
 
 var (

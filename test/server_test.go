@@ -37,11 +37,3 @@ func TestServerSetup(t *testing.T) {
 		t.Fatalf("Expected message: %s, received message: %s", internal.EncryptedMessage, *lockedPandoraBox)
 	}
 }
-
-// Perform test cases against the server here
-
-// Stop the Pandora server after testing
-// You should add a function in your Pandora package to stop the server
-// Example: pandora.StopPandoraServer()
-
-// Add assertions or more test cases as needed

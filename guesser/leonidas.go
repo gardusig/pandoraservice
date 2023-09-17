@@ -16,6 +16,7 @@ const maxRetryAttempt = 5
 type NumberGuesser struct {
 	client pandoraproto.PandoraServiceClient
 
+	level      uint32
 	lowerBound int64
 	upperBound int64
 }
@@ -26,16 +27,27 @@ func NewNumberGuesser(client pandoraproto.PandoraServiceClient) NumberGuesser {
 	}
 }
 
-func (g *NumberGuesser) GetLockedPandoraBox() (*string, error) {
-	g.lowerBound = internal.MinThreshold
-	g.upperBound = internal.MaxThreshold
-	for g.lowerBound <= g.upperBound {
-		response, err := g.makeNextGuess()
+func (g *NumberGuesser) GetLockedPandoraBox() (encryptedMessage *string, err error) {
+	g.level = internal.LevelMinThreshold
+	for g.level <= internal.LevelMaxThreshold {
+		encryptedMessage, err = g.guessNumberByLevel()
 		if err != nil {
 			return nil, err
 		}
-		if response != nil {
-			return response, nil
+		logrus.Debug("Passed level: ", g.level, ", message: ", *encryptedMessage)
+		g.level += 1
+	}
+	return encryptedMessage, nil
+}
+
+func (g *NumberGuesser) guessNumberByLevel() (*string, error) {
+	logrus.Debug("attempt to guess number for level: ", g.level)
+	g.lowerBound = internal.GuessMinThreshold
+	g.upperBound = internal.GuessMaxThreshold
+	for g.lowerBound <= g.upperBound {
+		encryptedMessage, err := g.makeNextGuess()
+		if encryptedMessage != nil || err != nil {
+			return encryptedMessage, err
 		}
 	}
 	return nil, fmt.Errorf("Failed to guess the right number :/")
@@ -70,6 +82,7 @@ func (g *NumberGuesser) updateBoundaries(guess int64, response string) error {
 func (g *NumberGuesser) sendGuessRequest(guess int64) (*pandoraproto.GuessNumberResponse, error) {
 	request := pandoraproto.GuessNumberRequest{
 		Number: guess,
+		Level:  g.level,
 	}
 	for attempt := 0; attempt < maxRetryAttempt; attempt += 1 {
 		if attempt > 0 {
