@@ -17,7 +17,7 @@ type PandoraServiceClient struct {
 
 func NewPandoraServiceClient() (*PandoraServiceClient, error) {
 	conn, err := grpc.Dial(
-		fmt.Sprintf("server:%s", internal.PandoraServicePort),
+		fmt.Sprintf("localhost:%s", internal.PandoraServicePort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
