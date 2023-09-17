@@ -7,26 +7,35 @@ import (
 )
 
 type SpecialNumberDb struct {
-	randomNumber int64
+	randomNumberByLevel map[uint32]int64
 }
 
 func NewSpecialNumberDb() *SpecialNumberDb {
 	return &SpecialNumberDb{
-		randomNumber: getRandomNumber(),
+		randomNumberByLevel: getPopulatedDb(),
 	}
 }
 
-func (db *SpecialNumberDb) ValidateGuess(guess int64) string {
-	if guess < db.randomNumber {
+func (db *SpecialNumberDb) ValidateGuess(level uint32, guess int64) string {
+	randomNumber := db.randomNumberByLevel[level]
+	if guess < randomNumber {
 		return internal.Less
 	}
-	if guess > db.randomNumber {
+	if guess > randomNumber {
 		return internal.Greater
 	}
-	db.randomNumber = getRandomNumber()
+	db.randomNumberByLevel[level] = getRandomNumber()
 	return internal.Equal
 }
 
 func getRandomNumber() int64 {
-	return rand.Int63n(internal.MaxThreshold-internal.MinThreshold+1) + internal.MinThreshold
+	return rand.Int63n(internal.GuessMaxThreshold-internal.GuessMinThreshold+1) + internal.GuessMinThreshold
+}
+
+func getPopulatedDb() map[uint32]int64 {
+	db := make(map[uint32]int64)
+	for level := internal.LevelMinThreshold; level <= internal.LevelMaxThreshold; level += 1 {
+		db[level] = getRandomNumber()
+	}
+	return db
 }

@@ -37,12 +37,12 @@ func (s *PandoraServiceServer) Start() error {
 }
 
 func (s *PandoraServiceServer) GuessNumber(ctx context.Context, req *pandoraproto.GuessNumberRequest) (*pandoraproto.GuessNumberResponse, error) {
-	logrus.Debug("Received request at server with number: ", req.Number)
+	logrus.Debug("Received request at server, level: ", req.Level, ", guess: ", req.Number)
 	err := validateGuessNumberRequest(req)
 	if err != nil {
 		return nil, err
 	}
-	result := s.db.ValidateGuess(req.Number)
+	result := s.db.ValidateGuess(req.Level, req.Number)
 	response := pandoraproto.GuessNumberResponse{
 		Result:           result,
 		LockedPandoraBox: nil,
@@ -60,11 +60,17 @@ func startServer(server *grpc.Server, listener net.Listener) {
 }
 
 func validateGuessNumberRequest(req *pandoraproto.GuessNumberRequest) error {
-	if req.Number < internal.MinThreshold {
-		return fmt.Errorf("Guess must be at least %v", internal.MinThreshold)
+	if req.Level < internal.LevelMinThreshold {
+		return fmt.Errorf("Level must be at least %v", internal.LevelMinThreshold)
 	}
-	if req.Number > internal.MaxThreshold {
-		return fmt.Errorf("Guess must be at most %v", internal.MaxThreshold)
+	if req.Level > internal.LevelMaxThreshold {
+		return fmt.Errorf("Level must be at most %v", internal.LevelMaxThreshold)
+	}
+	if req.Number < internal.GuessMinThreshold {
+		return fmt.Errorf("Guess must be at least %v", internal.GuessMinThreshold)
+	}
+	if req.Number > internal.GuessMaxThreshold {
+		return fmt.Errorf("Guess must be at most %v", internal.GuessMaxThreshold)
 	}
 	return nil
 }
