@@ -3,8 +3,22 @@ package internal
 import "os"
 
 const (
-	pandoraPortEnvKey  = "PANDORA_PORT_ENV"
+	pandoraPortEnvKey = "PANDORA_GRPC_PORT"
+	pandoraHostEnvKey = "PANDORA_GRPC_HOST"
+
 	pandoraDefaultPort = "50051"
+	pandoraDefaultHost = "localhost"
+)
+
+var (
+	PandoraServicePort string
+	PandoraServerHost  string
+)
+
+var (
+	Equal   = "="
+	Less    = "<"
+	Greater = ">"
 )
 
 const (
@@ -15,17 +29,13 @@ const (
 	GuessMaxThreshold int64 = +4000000000000000000
 )
 
-var (
-	Equal   = "="
-	Less    = "<"
-	Greater = ">"
-)
-
-var PandoraServicePort string
-
 func init() {
 	PandoraServicePort = os.Getenv(pandoraPortEnvKey)
 	if PandoraServicePort == "" {
 		PandoraServicePort = pandoraDefaultPort
+	}
+	PandoraServerHost = os.Getenv(pandoraHostEnvKey)
+	if PandoraServerHost == "" {
+		PandoraServerHost = pandoraDefaultHost
 	}
 }

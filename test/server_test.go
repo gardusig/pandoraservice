@@ -3,7 +3,6 @@ package test
 import (
 	"testing"
 
-	"github.com/gardusig/pandoraservice/guesser"
 	"github.com/gardusig/pandoraservice/pandora"
 	"github.com/sirupsen/logrus"
 )
@@ -24,15 +23,9 @@ func TestServerSetup(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to connect: %v", err)
 	}
-	logrus.Debug("started client")
-	guesser := guesser.NewGuesser(client)
-	logrus.Debug("created number guesser")
-	openedPandoraBox, err := guesser.GetPandoraBox()
+	response, err := client.SendGuessRequest(0, 0)
 	if err != nil {
-		t.Fatalf("failed to guess right number: %v", err)
+		t.Fatalf("failed to make guess request: %v", err)
 	}
-	if openedPandoraBox == nil {
-		t.Fatalf("expected opened pandora box, got nil instead")
-	}
-	logrus.Debug("message: ", openedPandoraBox.Message)
+	logrus.Debug("server response: ", response.Result)
 }
