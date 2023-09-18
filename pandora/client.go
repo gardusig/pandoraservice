@@ -6,8 +6,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/gardusig/grpc_service/internal"
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
+	"github.com/gardusig/pandoraservice/internal"
 )
 
 type PandoraServiceClient struct {

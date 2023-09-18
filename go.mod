@@ -1,4 +1,4 @@
-module github.com/gardusig/grpc_service
+module github.com/gardusig/pandoraservice
 
 go 1.21
 

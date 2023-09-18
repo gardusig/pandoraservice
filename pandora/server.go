@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/gardusig/grpc_service/database"
-	"github.com/gardusig/grpc_service/internal"
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
+	"github.com/gardusig/pandoraservice/database"
+	"github.com/gardusig/pandoraservice/internal"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )

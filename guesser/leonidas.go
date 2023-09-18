@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gardusig/grpc_service/internal"
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
+	"github.com/gardusig/pandoraservice/internal"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/status"
 )
