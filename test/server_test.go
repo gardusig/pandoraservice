@@ -25,7 +25,7 @@ func TestServerSetup(t *testing.T) {
 		t.Fatalf("failed to connect: %v", err)
 	}
 	logrus.Debug("started client")
-	guesser := guesser.NewGuesser(client.ServiceClient)
+	guesser := guesser.NewGuesser(client)
 	logrus.Debug("created number guesser")
 	openedPandoraBox, err := guesser.GetPandoraBox()
 	if err != nil {

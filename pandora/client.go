@@ -11,8 +11,9 @@ import (
 )
 
 type PandoraServiceClient struct {
-	connection    *grpc.ClientConn
-	ServiceClient pandoraproto.PandoraServiceClient
+	pandoraproto.PandoraServiceClient
+
+	connection *grpc.ClientConn
 }
 
 func NewPandoraServiceClient() (*PandoraServiceClient, error) {
@@ -25,8 +26,8 @@ func NewPandoraServiceClient() (*PandoraServiceClient, error) {
 	}
 	client := pandoraproto.NewPandoraServiceClient(conn)
 	return &PandoraServiceClient{
-		connection:    conn,
-		ServiceClient: client,
+		PandoraServiceClient: client,
+		connection:           conn,
 	}, nil
 }
 

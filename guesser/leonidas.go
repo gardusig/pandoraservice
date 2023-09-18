@@ -7,6 +7,7 @@ import (
 
 	pandoraproto "github.com/gardusig/pandoraproto/generated/go"
 	"github.com/gardusig/pandoraservice/internal"
+	"github.com/gardusig/pandoraservice/pandora"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/status"
 )
@@ -14,16 +15,16 @@ import (
 const maxRetryAttempt = 5
 
 type Guesser struct {
-	client pandoraproto.PandoraServiceClient
+	pandoraClient *pandora.PandoraServiceClient
 
 	level      uint32
 	lowerBound int64
 	upperBound int64
 }
 
-func NewGuesser(client pandoraproto.PandoraServiceClient) Guesser {
-	return Guesser{
-		client: client,
+func NewGuesser(pandoraClient *pandora.PandoraServiceClient) *Guesser {
+	return &Guesser{
+		pandoraClient: pandoraClient,
 	}
 }
 
@@ -49,7 +50,7 @@ func (g *Guesser) getOpenedPandoraBox(lockedPandoraBox *pandoraproto.LockedPando
 		if attempt > 0 {
 			time.Sleep(1 << time.Duration(attempt) * time.Second)
 		}
-		resp, err := g.client.OpenBox(context.Background(), lockedPandoraBox)
+		resp, err := g.pandoraClient.OpenBox(context.Background(), lockedPandoraBox)
 		if err == nil {
 			return resp, nil
 		}
@@ -96,7 +97,7 @@ func (g *Guesser) sendGuessRequest(guess int64) (*pandoraproto.GuessNumberRespon
 		if attempt > 0 {
 			time.Sleep(1 << time.Duration(attempt) * time.Second)
 		}
-		resp, err := g.client.GuessNumber(context.Background(), &request)
+		resp, err := g.pandoraClient.GuessNumber(context.Background(), &request)
 		if err == nil {
 			return resp, nil
 		}
