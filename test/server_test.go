@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	"github.com/gardusig/grpc_service/guesser"
-	"github.com/gardusig/grpc_service/pandora"
+	"github.com/gardusig/pandoraservice/guesser"
+	"github.com/gardusig/pandoraservice/pandora"
 	"github.com/sirupsen/logrus"
 )
 

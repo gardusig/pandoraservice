@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/gardusig/grpc_service/internal"
+	"github.com/gardusig/pandoraservice/internal"
 )
 
 const (
