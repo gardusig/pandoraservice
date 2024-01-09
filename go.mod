@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/gardusig/pandoraproto v1.0.5
 	github.com/sirupsen/logrus v1.9.3
-	google.golang.org/grpc v1.58.0
+	google.golang.org/grpc v1.58.3
 )
 
 require (
